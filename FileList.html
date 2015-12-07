@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
+  <script>
+  $(document).ready(function() {  
+	var fileCountArray;
+	var numNames;
+	$("#getFilesButton").click(function(event)
+	{
+		console.log("getFilesButton - Clicked");
+		var files = $('#basicUploadFile').prop("files");
+		var names = $.map(files, function(val) { return val.name; });
+		var fileListString = "";
+		fileCountArray = [];
+		numNames = emptyArray10();
+		for(var i = 0; i < names.length; i++)
+		{		
+			var res = names[i].split(",");
+			if($('#getFileNames').prop('checked'))
+			{
+				var lastest = names[i].split(".");
+				fileListString += "\n" + lastest[0];
+			}
+			else
+			{				
+				var last = res[res.length - 1].split("(");
+				var lastest = last[1].split(".");
+				fileListString += "\n length: " + (res.length) + " " + lastest[0].replace(/\)/g, "");				
+			}
+			fileCountArray.push(res.length);
+			numNames[res.length]++;
+		}		
+		var escaped = $("#fileListLabel").text(fileListString).text();
+		$("#fileListLabel").html(escaped.replace(/\n/g, '<br />'));
+	});
+	$("#getNumButton").click(function(event)
+	{
+		
+		if($('#getAllNum').prop('checked'))
+		{	
+			var nameCountString = "";
+			for(i = 2; i <= 10; i++)
+			{
+				nameCountString += "\n " + i + ": " + numNames[i];
+			}
+			var escaped = $("#numLabel").text(nameCountString).text();
+			$("#numLabel").html(escaped.replace(/\n/g, '<br />'));
+		}
+		else
+		{			
+			var num = $("#numInput").val();
+			$("#numLabel").text(numNames[num]);
+		}
+	});
+	function emptyArray10 ()
+	{
+		var array = [0,0,0,0,0,0,0,0,0,0,0];
+		return array;
+	}
+  });
+  </script>
+</head>
+<body>
+<input type="checkbox" id="getFileNames">Get File Names?<br>
+<p>File Directory: <input type="file" id="basicUploadFile" multiple="multiple"></input> </p>
+<p>Num Here: <input type="text" id="numInput"><button id="getNumButton">Get Num</button><input type="checkbox" id="getAllNum">Get All?</p>
+<label id="numLabel">---</label>
+<br>
+<button id="getFilesButton">Get Files</button>
+<label id="fileListLabel"></label>
+</body>
+</html>
